@@ -1,13 +1,12 @@
 import json
 
 from classes.schedule_record import ScheduleRecord
-from classes.schedule_record_decoder import ScheduleRecordDecoder
 from classes.schedule_record_encoder import ScheduleRecordEncoder
 from data_collector.parsing_data_collector import ParsingDataCollector
 
 from redis import StrictRedis
 
-rs = StrictRedis(host="localhost", decode_responses=False)
+rs = StrictRedis(host="redis", decode_responses=False)
 
 
 class CachedParsingDataCollector(ParsingDataCollector):

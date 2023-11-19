@@ -5,10 +5,10 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 
 from classes.schedule_record_encoder import ScheduleRecordEncoder
-from data_collector.parsing_data_collector import ParsingDataCollector
+from data_collector.cached_parsing_data_collector import CachedParsingDataCollector
 
 app = FastAPI()
-data_collector = ParsingDataCollector()
+data_collector = CachedParsingDataCollector()
 
 
 @app.get('/')

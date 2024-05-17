@@ -1,0 +1,16 @@
+version: '3.2'
+
+services:
+  api:
+    container_name: osu_schedule_api
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 8000:8000
+    links:
+      - keydb
+
+  keydb:
+    container_name: osu_schedule_api_key_db
+    image: eqalpha/keydb

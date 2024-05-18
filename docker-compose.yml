@@ -10,6 +10,10 @@ services:
       - 8000:8000
     links:
       - keydb
+    volumes:
+      - type: bind
+        source: .
+        target: /app/
 
   keydb:
     container_name: osu_schedule_api_key_db

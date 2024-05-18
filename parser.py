@@ -1,6 +1,7 @@
 import abc
 import ast
 import re
+from datetime import timedelta
 from typing import Any, Optional
 
 import requests
@@ -91,28 +92,28 @@ class Parser(AbstractParser):
         return objects_list
 
     @classmethod
-    @key_db_cache(ttl=60*60*8)
+    @key_db_cache(ttl=timedelta(hours=8))
     def get_faculties_list(cls) -> list[Faculty]:
         return cls.__parse_schedule_data_list('facult', Faculty, {'id': 'id',
                                                                   'name': 'title',
                                                                   'short_name': 'name'})
 
     @classmethod
-    @key_db_cache(60*60*8)
+    @key_db_cache(timedelta(hours=8))
     def get_courses_list(cls, faculty_id: int) -> list[Course]:
         return cls.__parse_schedule_data_list('potok', Course, {'id': 'id',
                                                                 'name': 'name'},
                                               facult=faculty_id)
 
     @classmethod
-    @key_db_cache(ttl=60*60*8)
+    @key_db_cache(timedelta(hours=8))
     def get_groups_list(cls, faculty_id: int, course_id: int) -> list[Group]:
         return cls.__parse_schedule_data_list('group', Group, {'id': 'id',
                                                                'name': 'name'},
                                               facult=faculty_id, potok=course_id)
 
     @classmethod
-    @key_db_cache(ttl=60*60*8)
+    @key_db_cache(timedelta(hours=8))
     def get_departments_list(cls, faculty_id: int) -> list[Department]:
         return cls.__parse_schedule_data_list('kafedra', Department, {'id': 'id',
                                                                       'name': 'title',
@@ -120,7 +121,7 @@ class Parser(AbstractParser):
                                               who_id=2, facult=faculty_id)
 
     @classmethod
-    @key_db_cache(ttl=60*60*8)
+    @key_db_cache(timedelta(hours=8))
     def get_teachers_list(cls, department_id: int) -> list[Teacher]:
         return cls.__parse_schedule_data_list('prep', Teacher, {'id': 'id',
                                                                 'name': 'title',
@@ -203,11 +204,11 @@ class Parser(AbstractParser):
         return schedule_dict
 
     @classmethod
-    @key_db_cache(ttl=60*60*1)
+    @key_db_cache(ttl=timedelta(hours=1))
     def get_student_schedule(cls, group_id: int) -> dict[str, list[ScheduleRecord]]:
         return cls.__get_schedule(who=1, group=group_id)
 
     @classmethod
-    @key_db_cache(ttl=60*60*1)
+    @key_db_cache(ttl=timedelta(hours=1))
     def get_teacher_schedule(cls, teacher_id: int) -> dict[str, list[ScheduleRecord]]:
         return cls.__get_schedule(who=2, prep=teacher_id)

@@ -1,11 +1,12 @@
 import json
+from datetime import timedelta
 from functools import wraps
 from typing import Callable, Optional
 
 from db import db
 
 
-def key_db_cache(ttl: Optional[int] = None) -> Callable:
+def key_db_cache(ttl: Optional[timedelta] = None) -> Callable:
     def wrapper(func: Callable):
         @wraps(func)
         def _wrapper(*args, **kwargs):
@@ -17,10 +18,7 @@ def key_db_cache(ttl: Optional[int] = None) -> Callable:
 
             response = func(*args, **kwargs)
 
-            db.set(key, json.dumps(response, default=lambda obj: obj.dict()))
-
-            if ttl:
-                db.expire(key, ttl)
+            db.set(key, json.dumps(response, default=lambda obj: obj.dict()), ex=ttl)
 
             return response
 
